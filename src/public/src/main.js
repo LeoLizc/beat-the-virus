@@ -10,7 +10,7 @@ const config = {
     autoResize: true,
     parent: "container",
     type: Phaser.AUTO,
-    scene: [MenuScene, GameOverScene, WinnerScene],
+    scene: [MenuScene, GameScene, GameOverScene, WinnerScene],
     physics: {
         default: "arcade",
         tileBias: 32,

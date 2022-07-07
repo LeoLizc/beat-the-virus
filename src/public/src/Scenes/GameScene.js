@@ -32,6 +32,7 @@ export default class GameScene extends Phaser.Scene {
 
         // Sprites del personaje.
         this.load.spritesheet("player", "./assets/characters/Player/fullSprite.png", {frameWidth : 25, frameHeight : 45});
+        this.load.spritesheet('player2',"./assets/characters/Player/fullSprite2.png", {frameWidth : 25, frameHeight : 45})
 
         // Se cargan los archivos de audio.
         this.load.audio("covidSound", "./music/covid.ogg");
@@ -102,10 +103,15 @@ export default class GameScene extends Phaser.Scene {
 
         this.vacuna.refresh();
 
+        //Se crea el jugador dos
+        this.game.player2 = this.player2 = this.physics.add.sprite(10,4,'player2');
+        this.player2.setOrigin(0).setSize(20, 20).body.setOffset(3,24);
+
         // Se crea el jugador:
         this.game.player= this.player = this.physics.add.sprite(10, 4, "player");
         this.player.setOrigin(0);
         this.player.setSize(20, 20);
+        this.player.body.setOffset(3,24);
         this.player.setCollideWorldBounds(true);
         this.cameras.main.startFollow(this.player, true, 0.05, 0.05);
 
@@ -115,6 +121,11 @@ export default class GameScene extends Phaser.Scene {
         this.player.vel = 100;
         this.player.score = 0;
         this.player.vacunas = 0;
+        this.player2.hp = 3;
+        this.player2.hasMask = false;
+        this.player2.vel = 100;
+        this.player2.score = 0;
+        this.player2.vacunas = 0;
 
         // Animaciones
         this.anims.create({
@@ -181,6 +192,71 @@ export default class GameScene extends Phaser.Scene {
             frameRate: 5
         });
 
+        // Animaciones2
+        this.anims.create({
+            key: 'down2',
+            frames: this.anims.generateFrameNumbers("player2", {
+                start: 0,
+                end: 3
+            }),
+            repeat: -1,
+            frameRate: 5
+        });
+        this.anims.create({
+            key: 'left2',
+            frames: this.anims.generateFrameNumbers("player2", {
+                start: 4,
+                end: 7
+            }),
+            repeat: -1,
+            frameRate: 5
+        });
+        this.anims.create({
+            key: 'right2',
+            frames: this.anims.generateFrameNumbers("player2", {
+                start: 8,
+                end: 11
+            }),
+            repeat: -1,
+            frameRate: 5
+        });
+        this.anims.create({
+            key: 'up2',
+            frames: this.anims.generateFrameNumbers("player2", {
+                start: 12,
+                end: 15
+            }),
+            repeat: -1,
+            frameRate: 5
+        });
+        this.anims.create({
+            key: 'down_m2',
+            frames: this.anims.generateFrameNumbers("player2", {
+                start: 16,
+                end: 19
+            }),
+            repeat: -1,
+            frameRate: 5
+        });
+        this.anims.create({
+            key: 'left_m2',
+            frames: this.anims.generateFrameNumbers("player2", {
+                start: 20,
+                end: 23
+            }),
+            repeat: -1,
+            frameRate: 5
+        });
+        this.anims.create({
+            key: 'right_m2',
+            frames: this.anims.generateFrameNumbers("player2", {
+                start: 24,
+                end: 27
+            }),
+            repeat: -1,
+            frameRate: 5
+        });
+
         // Tiempo restante
         text = this.add.text(32, 32, 'Tiempo restante: ' + this.formatTime(this.runTime));
         text.setVisible(false);
@@ -193,6 +269,9 @@ export default class GameScene extends Phaser.Scene {
         this.physics.add.overlap(this.player, this.covid, this.covidVirus, null, this);
         this.physics.add.overlap(this.player, this.vacuna, this.getVacuna, null, this);
 
+        // Colision P2.
+        this.physics.add.collider(this.player2, layer);
+
         // Teclas de movimiento
         this.right = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D);
         this.right2 = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.RIGHT);
@@ -202,6 +281,67 @@ export default class GameScene extends Phaser.Scene {
         this.up2 = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.UP);
         this.down = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S);
         this.down2 = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.DOWN);
+
+        //Eventos - Presión
+        this.right.on('down', ()=>{
+            Client.sendDownMovement({x: this.player.x, y: this.player.y, key: 'R'});
+            console.log('R is press');
+        });
+        this.right2.on('down', ()=>{
+            Client.sendDownMovement({x: this.player.x, y: this.player.y, key: 'R'});
+        });
+        this.left.on('down', ()=>{
+            Client.sendDownMovement({x: this.player.x, y: this.player.y, key: 'L'});
+            console.log('d is press');
+        });
+        this.left2.on('down', ()=>{
+            Client.sendDownMovement({x: this.player.x, y: this.player.y, key: 'L'});
+        });
+        this.up.on('down', ()=>{
+            Client.sendDownMovement({x: this.player.x, y: this.player.y, key: 'U'});
+            console.log('u is press');
+        });
+        this.up2.on('down', ()=>{
+            Client.sendDownMovement({x: this.player.x, y: this.player.y, key: 'U'});
+        });
+        this.down.on('down', ()=>{
+            Client.sendDownMovement({x: this.player.x, y: this.player.y, key: 'D'});
+        });
+        this.down2.on('down', ()=>{
+            Client.sendDownMovement({x: this.player.x, y: this.player.y, key: 'D'});
+        });
+
+        //Eventos - Soltar
+        this.right.on('up', ()=>{
+            Client.sendUpMovement ({x: this.player.x, y: this.player.y, key: 'R'});
+        });
+        this.right2.on('up', ()=>{
+            Client.sendUpMovement ({x: this.player.x, y: this.player.y, key: 'R'});
+        });
+        this.left.on('up', ()=>{
+            Client.sendUpMovement ({x: this.player.x, y: this.player.y, key: 'L'});
+        });
+        this.left2.on('up', ()=>{
+            Client.sendUpMovement ({x: this.player.x, y: this.player.y, key: 'L'});
+        });
+        this.up.on('up', ()=>{
+            Client.sendUpMovement ({x: this.player.x, y: this.player.y, key: 'U'});
+        });
+        this.up2.on('up', ()=>{
+            Client.sendUpMovement ({x: this.player.x, y: this.player.y, key: 'U'});
+        });
+        this.down.on('up', ()=>{
+            Client.sendUpMovement ({x: this.player.x, y: this.player.y, key: 'D'});
+        });
+        this.down2.on('up', ()=>{
+            Client.sendUpMovement ({x: this.player.x, y: this.player.y, key: 'D'});
+        });
+
+        //Teclas ficticias del player 2
+        this.player2.up={isDown: false}
+        this.player2.down={isDown: false}
+        this.player2.left={isDown: false}
+        this.player2.right={isDown: false}
 
         // Sonidos
         this.covidSound = this.sound.add("covidSound");
@@ -214,6 +354,7 @@ export default class GameScene extends Phaser.Scene {
     update(time, delta) {
 
         this.player.setVelocity(0);
+        this.player2.setVelocity(0);
 
         // En caso de que el jugador pierda sus corazones.
         if (this.player.hp === 0 /*|| this.runTime === 0*/){
@@ -232,13 +373,17 @@ export default class GameScene extends Phaser.Scene {
         if (this.maskTime === 0){
             this.player.hasMask = false;
             this.player.vel = 100;
+            Client.sendMask(false);
         }
 
         if (this.covidTime === 0 && this.player.hasMask === false){
             this.player.vel = 100;
+            Client.sendVirus(false);
         }
 
-        // Movimiento.
+        //--------------------------------
+
+        // Movimiento P1.
         if(this.up.isDown || this.up2.isDown){
             this.player.anims.play("up", true);
             this.player.body.setVelocityY(-this.player.vel);
@@ -254,6 +399,7 @@ export default class GameScene extends Phaser.Scene {
                 this.player.anims.play("right_m", true);
             }else{
                 this.player.anims.play("right", true);
+                this.player2.anims.play("right2", true);
             }
             this.player.body.setVelocityX(this.player.vel);
         } else if(this.left.isDown || this.left2.isDown){
@@ -266,11 +412,43 @@ export default class GameScene extends Phaser.Scene {
         } else{
             this.player.anims.stop();
         }
+
+        // Movimiento P2.
+        if(this.player2.up.isDown){
+            this.player2.anims.play("up2", true);
+            this.player2.body.setVelocityY(-this.player2.vel);
+        } else if(this.player2.down.isDown ){
+            if (this.player2.hasMask){
+                this.player2.anims.play("down_m2", true);
+            }else{
+                this.player2.anims.play("down2", true);
+            }
+            this.player2.body.setVelocityY(this.player2.vel);
+        } else if (this.player2.right.isDown ){
+            if (this.player2.hasMask){
+                this.player2.anims.play("right_m2", true);
+            }else{
+                this.player2.anims.play("right2", true);
+            }
+            this.player2.body.setVelocityX(this.player2.vel);
+        } else if(this.player2.left.isDown ){
+            if (this.player2.hasMask){
+                this.player2.anims.play("left_m2", true);
+            }else{
+                this.player2.anims.play("left2", true);
+            }
+            this.player2.body.setVelocityX(-this.player2.vel);
+        } else{
+            this.player2.anims.stop();
+        }
     }
 
     destroyMask(player, mask) {
         mask.destroy();
         this.vacunaSound.play();
+
+        Client.sendMask(true);
+
         this.player.hasMask = true;
         this.player.vel = 200;
         masktimedEvent = this.time.addEvent({ delay: 1000, callback: this.maskEvent, callbackScope: this, loop: true });
@@ -279,7 +457,7 @@ export default class GameScene extends Phaser.Scene {
     covidVirus(player, covid){
         covid.destroy();
         if(!this.player.hasMask){
-            Client.sendVirus();
+            Client.sendVirus(true);
             this.covidTime = 5;
             this.player.hp -= 1;
             this.player.vel = 40;

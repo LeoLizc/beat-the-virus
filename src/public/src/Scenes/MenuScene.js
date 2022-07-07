@@ -14,7 +14,7 @@ export default class MenuScene extends Phaser.Scene {
         this.load.image("intro", "./assets/Scenes/intro.png");
         this.load.audio("introMusic", "./music/intro.ogg");
 
-        if(!this.scene.get(Scenes.SCENES.PLAY))this.scene.add(Scenes.SCENES.PLAY, new GameScene());
+        // if(!this.scene.get(Scenes.SCENES.PLAY))this.scene.add(Scenes.SCENES.PLAY, new GameScene());
     }
 
     create(){
@@ -22,7 +22,15 @@ export default class MenuScene extends Phaser.Scene {
         this.introSound = this.sound.add("introMusic");
         this.introSound.play();
 
+        let switc=false;
+        this.game.esperaText = this.add.text(265,400,'Esperando Nuevo integrante',{font: '20px Verdana',
+         color: '#f90000',
+         align: 'center'});
+
         Client.reInit();
+
+        
+
         // this.input.on("pointerdown", () => this.scene.start(Scenes.SCENES.PLAY));
     }
 }
