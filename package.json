@@ -1,0 +1,20 @@
+{
+  "name": "TCG",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo prueba de testeo realizada",
+    "start": "node src/index.js",
+    "dev": "nodemon src/index.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.17.1",
+    "nodemon": "^2.0.6",
+    "phaser": "^3.24.1",
+    "socket.io": "^3.0.3"
+  }
+}
