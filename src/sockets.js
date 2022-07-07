@@ -1,5 +1,9 @@
 module.exports = async function (io){
 
+    const LIMITESALAS=5;
+
+    let roble=[[]];
+
     let enCola=[];
     let principal=[];
     let enJuego=false;
