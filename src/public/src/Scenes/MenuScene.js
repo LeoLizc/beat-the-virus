@@ -1,5 +1,6 @@
 import GameScene from "./GameScene.js";
 import { Scenes } from "./Scenes.js";
+import { Client } from '../client.js';
 
 export default class MenuScene extends Phaser.Scene {
     constructor() {
@@ -21,6 +22,7 @@ export default class MenuScene extends Phaser.Scene {
         this.introSound = this.sound.add("introMusic");
         this.introSound.play();
 
+        Client.reInit();
         // this.input.on("pointerdown", () => this.scene.start(Scenes.SCENES.PLAY));
     }
 }

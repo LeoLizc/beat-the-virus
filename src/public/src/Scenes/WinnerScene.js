@@ -1,4 +1,4 @@
-import { Scenes } from "./Scenes.js";
+﻿import { Scenes } from "./Scenes.js";
 import { Client } from '../client.js';
 export default class WinnerScene extends Phaser.Scene {
     constructor() {
@@ -9,13 +9,13 @@ export default class WinnerScene extends Phaser.Scene {
 
     preload(){
         // Se cargan las imágenes iniciales.
-        this.load.image("intro", "./assets/Scenes/winner.png");
+        this.load.image("winneri", "./assets/Scenes/winner.png");
         this.load.audio("winner", "./music/win.ogg");
     }
 
     create(){
         if(!Client.estado)Client.sendVictoria();
-        this.add.image(0, 0, "intro").setOrigin(0);
+        this.add.image(0, 0, "winneri").setOrigin(0);
         this.winnerSound = this.sound.add("winner");
         this.winnerSound.play();
         console.log("Has Ganado");

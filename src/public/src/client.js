@@ -2,27 +2,30 @@ import { Scenes } from "./Scenes/Scenes.js";
 import { Game } from './main.js';
 
 export let Client={};
-Client.socket=io();
+// Client.socket=io();
 
-
-Client.socket.on('aPrincipal', (id)=>{
-    console.log('Has entrado a la sala principal como jugador ',(id+1));
-    Client.socket.on('iniciar',(estado)=>{
-        if(estado){
-            // boton.disabled=false;
-            console.log('empieza el conteo regresivo');
-            Client.socket.on('juego',()=>{
-                console.log('Empieza un nuevo juego');
-                console.log('cambiamos de escena');
-                Game.scene.start(Scenes.SCENES.PLAY);
-                Client.iniciar();
-            });
-        }else{
-            // boton.disabled=true;
-            console.log('se salieron, a esperar');
-        }
+Client.reInit=function(){
+    if(this.socket)this.socket.close();
+    this.socket=io();
+    Client.socket.on('aPrincipal', (id)=>{
+        console.log('Has entrado a la sala principal como jugador ',(id+1));
+        Client.socket.on('iniciar',(estado)=>{
+            if(estado){
+                // boton.disabled=false;
+                console.log('empieza el conteo regresivo');
+                Client.socket.on('juego',()=>{
+                    console.log('Empieza un nuevo juego');
+                    console.log('cambiamos de escena');
+                    Game.scene.start(Scenes.SCENES.PLAY);
+                    Client.iniciar();
+                });
+            }else{
+                // boton.disabled=true;
+                console.log('se salieron, a esperar');
+            }
+        });
     });
-});
+}
 
 
 Client.sendVacuna=function (){

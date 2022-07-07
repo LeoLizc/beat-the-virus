@@ -103,7 +103,7 @@ export default class GameScene extends Phaser.Scene {
         this.vacuna.refresh();
 
         // Se crea el jugador:
-        this.player = this.physics.add.sprite(10, 4, "player");
+        this.game.player= this.player = this.physics.add.sprite(10, 4, "player");
         this.player.setOrigin(0);
         this.player.setSize(20, 20);
         this.player.setCollideWorldBounds(true);

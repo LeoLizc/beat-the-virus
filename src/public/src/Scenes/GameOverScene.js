@@ -1,4 +1,4 @@
-import { Scenes } from "./Scenes.js";
+﻿import { Scenes } from "./Scenes.js";
 import { Client } from '../client.js';
 
 export default class GameOverScene extends Phaser.Scene {
@@ -10,13 +10,13 @@ export default class GameOverScene extends Phaser.Scene {
 
     preload(){
         // Se cargan las imágenes iniciales.
-        this.load.image("intro", "./assets/Scenes/over.png");
+        this.load.image("over", "./assets/Scenes/over.png");
         this.load.audio("overSound", "./music/game_over1.ogg");
     }
 
     create(){
         if(!Client.estado)Client.sendDerrota();
-        this.add.image(0, 0, "intro").setOrigin(0);
+        this.add.image(0, 0, "over").setOrigin(0);
         this.gameOverSound = this.sound.add("overSound");
         this.gameOverSound.play();
         console.log("Has Perdido");
